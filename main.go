@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wetrade/routes"
-	kiteconnect "github.com/zerodha/gokiteconnect/v4"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -25,6 +25,30 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+func HandleRequest(w http.ResponseWriter, r *http.Request) {
+	rg := gin.Default()
+
+	rg.Use(CORSMiddleware())
+
+	rg.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello, World!",
+		})
+	})
+
+	// Define routes
+	routes.StockRoutes(rg)
+	routes.UserRoutes(rg)
+	routes.ContactRoutes(rg)
+
+	rg.ServeHTTP(w, r)
+}
+
+func main() {
+	log.Println("Vercel Server Started")
+}
+
+/*
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
@@ -229,3 +253,4 @@ func main() {
 
 	r.Run(":8000")
 }
+*/
