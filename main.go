@@ -33,6 +33,13 @@ func main() {
 	routes.UserRoutes(r)
 	routes.ContactRoutes(r)
 
+	// print Hello world route for testing
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello, World!",
+		})
+	})
+
 	r.POST("/place-order", func(c *gin.Context) {
 		var requestBody struct {
 			APIKey       string `json:"api_key"`
